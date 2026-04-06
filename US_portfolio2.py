@@ -83,8 +83,8 @@ if not df.empty:
 
     df_top5["투자 비율(%)"] = round((df_top5["조정_수익률"] / total_adj_return) * 100, 2)
     
-    # 최종 데이터프레임 정리
-    df_final = df_top5[["종목명", "수익률(%)", "투자 비율(%)", "투자금($)"]].reset_index(drop=True)
+    # 최종 데이터프레임 정리 (컬럼 순서 변경: 투자금 -> 투자 비율 -> 수익률)
+    df_final = df_top5[["종목명", "투자금($)", "투자 비율(%)", "수익률(%)"]].reset_index(drop=True)
     df_final.index = df_final.index + 1 # 인덱스를 1부터 시작
 
     st.success(f"분석 완료! 총 **${df_final['투자금($)'].sum()}** 단위로 최적의 배분이 완료되었습니다.")
@@ -96,12 +96,12 @@ if not df.empty:
     
     with col1:
         st.subheader("📋 이번 달 매수 리스트")
-        # 데이터프레임 깔끔하게 출력
+        # 데이터프레임 깔끔하게 출력 (포맷팅 순서도 맞춤 정렬)
         st.dataframe(
             df_final.style.format({
-                "수익률(%)": "{:.2f}%",
+                "투자금($)": "${}",
                 "투자 비율(%)": "{:.2f}%",
-                "투자금($)": "${}"
+                "수익률(%)": "{:.2f}%"
             }),
             use_container_width=True
         )
